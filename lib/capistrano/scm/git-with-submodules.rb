@@ -28,7 +28,8 @@ class Capistrano::SCM::Git::WithSubmodules < Capistrano::SCM::Git
           'GIT_INDEX_FILE' => temp_index_file_path.to_s
       ) do
         git :reset, '--mixed', fetch(:branch)
-        git :submodule, 'update', '--init', '--depth', 1, '--checkout', '--recursive'
+
+        git :submodule, fetch(:submodules_flags, 'update --init --depth 1 --checkout --recursive')
         verbose = Rake.application.options.trace ? 'v' : ''
         backend.execute :rm, "-f#{verbose}", temp_index_file_path.to_s
       end
